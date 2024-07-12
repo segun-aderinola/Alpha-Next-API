@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  nodeapp:
+    image: lozkey/alpha-next-backend-nodeapp:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=Alpha123#
+      - DB_NAME=alpha_next
+    
+    volumes:
+      - .:/Users/macbook/Downloads/projects/alpha-next-backend
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: Alpha123#
+      MYSQL_DATABASE: alpha_next
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  mysql-data:
